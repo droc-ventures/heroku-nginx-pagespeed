@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ ! -f $1/public/Index.html ]
+if [ ! -f $1/public/index.html ]
   then echo "No" && exit 1
   else echo "AngularJS" && exit 0
 fi
