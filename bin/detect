@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ ! -f $1/public/index.html ]
+if [ ! -f $1/public/Index.html ]
   then echo "No" && exit 1
-  else echo "heroku-nginx-pagespeed" && exit 0
+  else echo "AngularJS" && exit 0
 fi
