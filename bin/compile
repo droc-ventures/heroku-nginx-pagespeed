@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+set -e
+set -o pipefail
+
+# package versions
+NGINX_VERSION=1.6.1
+
+# package urls
+# caution: we don't mind hosting these files, but there is no guarantee the urls will not change.
+NGINX_URL="https://s3.amazonaws.com/drocventures/heroku/buildpacks/nginx-${NGINX_VERSION}.tar.gz"
+
+# arguments
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+# ensure the directories exist
+mkdir -p $BUILD_DIR $CACHE_DIR && cd ${BUILD_DIR}
+
+# move app to www
+mkdir -p $CACHE_DIR/www
+mv -- * $CACHE_DIR/www
+mv $CACHE_DIR/www .
+
+# keep procfile
+if [ -f www/Procfile ]; then
+	mv www/Procfile .
+fi
+
+# keep conf directory
+if [ -d www/conf ]; then
+	mv www/conf .
+fi
+
+# install nginx
+cd ${BUILD_DIR}
+if [ ! -d ./vendor/nginx ]; then
+	echo "-----> Installing Nginx ${NGINX_VERSION}"
+	mkdir -p ./vendor/nginx && cd ./vendor/nginx
+	curl --silent --max-time 60 --location $NGINX_URL | tar xz
+fi
+
+# create boot.sh
+echo "-----> Creating boot.sh Script"
+mkdir -p ${BUILD_DIR}/bin && cd ${BUILD_DIR}
+
+cat >>bin/boot.sh <<EOF
+#!/usr/bin/env bash
+
+# copy configurations
+cp -rf /app/conf/* /app
+erb /app/vendor/nginx/conf/server.conf.erb > /app/vendor/nginx/conf/server.conf
+
+# create pagespeed cache directory
+mkdir -p /tmp/pagespeed
+
+touch /app/vendor/nginx/logs/access.log /app/vendor/nginx/logs/error.log
+(tail -qF -n 0 /app/vendor/nginx/logs/*.log &)
+
+echo "-----> Starting Processes"
+nginx
+EOF
+chmod +x bin/boot.sh
+
+echo "-----> Installation Complete"

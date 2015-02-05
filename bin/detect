@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+if [ ! -f $1/public/index.html ]
+  then echo "No" && exit 1
+  else echo "heroku-nginx-pagespeed" && exit 0
+fi
