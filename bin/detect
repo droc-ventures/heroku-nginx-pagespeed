@@ -2,5 +2,5 @@
 
 if [ ! -f $1/public/index.html ]
   then echo "No" && exit 1
-  else echo "AngularJS" && exit 0
+  else echo "Nginx" && exit 0
 fi
