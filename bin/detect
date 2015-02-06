@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # bin/detect <build-dir>
-echo 'Nginx'
+echo 'Nginx (Static Files)'
 exit 0
