@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-
-if [ ! -f $1/public/index.html ]
-  then echo "No" && exit 1
-  else echo "Nginx" && exit 0
-fi
+# bin/detect <build-dir>
+echo 'Nginx'
+exit 0
