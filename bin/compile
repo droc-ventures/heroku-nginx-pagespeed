@@ -54,7 +54,7 @@ erb /app/vendor/nginx/conf/server.conf.erb > /app/vendor/nginx/conf/server.conf
 mkdir -p /tmp/pagespeed
 
 touch /app/vendor/nginx/logs/access.log /app/vendor/nginx/logs/error.log
-(tail -qF -n 0 /app/vendor/nginx/logs/nginx/*.log &)
+(tail -qF -n 0 /app/vendor/nginx/logs/*.log &)
 
 echo "-----> Starting Processes"
 nginx
