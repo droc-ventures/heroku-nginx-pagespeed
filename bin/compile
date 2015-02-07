@@ -5,7 +5,7 @@ set -e
 set -o pipefail
 
 # package versions
-NGINX_VERSION=1.6.2
+NGINX_VERSION=1.7.9
 
 # package urls
 # caution: we don't mind hosting these files, but there is no guarantee the urls will not change.
@@ -35,11 +35,9 @@ fi
 
 # install nginx
 cd ${BUILD_DIR}
-if [ ! -d ./vendor/nginx ]; then
-	echo "-----> Installing Nginx ${NGINX_VERSION}"
-	mkdir -p ./vendor/nginx && cd ./vendor/nginx
-	curl --silent --max-time 60 --location $NGINX_URL | tar xz
-fi
+echo "-----> Installing Nginx ${NGINX_VERSION}"
+mkdir -p ./vendor/nginx && cd ./vendor/nginx
+curl --silent --max-time 60 --location $NGINX_URL | tar xz
 
 # create boot.sh
 echo "-----> Creating boot.sh Script"
@@ -55,8 +53,8 @@ erb /app/vendor/nginx/conf/server.conf.erb > /app/vendor/nginx/conf/server.conf
 # create pagespeed cache directory
 mkdir -p /tmp/pagespeed
 
-touch /app/vendor/nginx/logs/access.log /app/vendor/nginx/logs/error.log
-(tail -qF -n 0 /app/vendor/nginx/logs/*.log &)
+touch /app/vendor/nginx/logs/nginx/access.log /app/vendor/nginx/logs/nginx/error.log
+(tail -qF -n 0 /app/vendor/nginx/logs/nginx/*.log &)
 
 echo "-----> Starting Processes"
 nginx
