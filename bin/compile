@@ -53,7 +53,7 @@ erb /app/vendor/nginx/conf/server.conf.erb > /app/vendor/nginx/conf/server.conf
 # create pagespeed cache directory
 mkdir -p /tmp/pagespeed
 
-touch /app/vendor/nginx/logs/nginx/access.log /app/vendor/nginx/logs/nginx/error.log
+touch /app/vendor/nginx/logs/access.log /app/vendor/nginx/logs/error.log
 (tail -qF -n 0 /app/vendor/nginx/logs/nginx/*.log &)
 
 echo "-----> Starting Processes"
