@@ -5,7 +5,7 @@ Buildpack Stack:
 * Google Pagespeed 1.8.31.4
 
 Heroku Requirement:
-Cedar-14
+* Cedar-14
 
 Compile and Package Nginx
 ----------------------------------
