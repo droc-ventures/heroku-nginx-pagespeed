@@ -7,6 +7,9 @@ Buildpack Stack:
 Heroku Requirement:
 * Cedar-14
 
+Usage:
+We use this stack to server static websites built with AngularJS.
+
 Compile and Package Nginx
 ----------------------------------
 This script should be excuted via the terminal ```heroku run bash --app=app-name```.
