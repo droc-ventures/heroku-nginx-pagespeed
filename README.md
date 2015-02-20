@@ -1,7 +1,7 @@
 Heroku Buildpack (Nginx + Google Pagespeed)
 ----------------------------------
 Buildpack Stack:
-* Nginx 1.7.9
+* Nginx 1.7.10
 * Google Pagespeed 1.8.31.4
 
 Heroku Requirement:
@@ -15,25 +15,25 @@ This script should be excuted via the terminal ```heroku run bash --app=app-name
 cd ~
 
 # vendor nginx
-curl -L http://nginx.org/download/nginx-1.7.9.tar.gz | tar xzv
+curl -L http://nginx.org/download/nginx-1.7.10.tar.gz | tar xzv
 cd ~/nginx-*
-curl -L http://garr.dl.sourceforge.net/project/pcre/pcre/8.35/pcre-8.35.tar.bz2 | tar xvj
-curl -L http://drocventures.s3.amazonaws.com/heroku/buildpacks/pagespeed-1.8.31.4.tar.gz | tar xzv
+curl -L http://garr.dl.sourceforge.net/project/pcre/pcre/8.36/pcre-8.36.tar.bz2 | tar xvj
+curl -L http://drocventures.s3.amazonaws.com/heroku/buildpacks/pagespeed-1.9.32.3.tar.gz | tar xzv
 cd ngx_pagespeed-release-*
-curl -L https://dl.google.com/dl/page-speed/psol/1.8.31.4.tar.gz | tar xzv
+curl -L https://dl.google.com/dl/page-speed/psol/1.9.32.3.tar.gz | tar xzv
 cd ~/nginx-*
 ./configure \
     --prefix=/app/vendor/nginx \
-    --with-pcre=pcre-8.35 \
+    --with-pcre=pcre-8.36 \
     --with-http_ssl_module \
     --with-http_gzip_static_module \
     --with-http_stub_status_module \
     --with-http_realip_module \
-    --add-module=ngx_pagespeed-release-1.8.31.4-beta
+    --add-module=ngx_pagespeed-release-1.9.32.3-beta
 make install
 
 # package nginx
-cd /app/vendor/nginx && tar cvzf /tmp/nginx-1.7.9.tar.gz .
+cd /app/vendor/nginx && tar cvzf /tmp/nginx-1.7.10.tar.gz .
 ```
 Once the package is created, execute the following commands to download it from the dyno.
 ```
