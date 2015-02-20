@@ -8,7 +8,7 @@ Heroku Requirement:
 * Cedar-14
 
 Usage:
-We use this stack to server static websites built with AngularJS.
+* We use this stack to server static websites built with AngularJS.
 
 Compile and Package Nginx
 ----------------------------------
