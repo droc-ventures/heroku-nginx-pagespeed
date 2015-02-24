@@ -28,9 +28,9 @@ if [ -f www/Procfile ]; then
 	mv www/Procfile .
 fi
 
-# keep conf directory
-if [ -d www/conf ]; then
-	mv www/conf .
+# keep heroku directory
+if [ -d www/Heroku ]; then
+	mv www/Heroku .
 fi
 
 # install nginx
