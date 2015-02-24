@@ -47,7 +47,7 @@ cat >>bin/boot.sh <<EOF
 #!/usr/bin/env bash
 
 # copy configurations
-cp -rf /app/conf/* /app
+cp -rf /app/Heroku/* /app
 erb /app/vendor/nginx/conf/server.conf.erb > /app/vendor/nginx/conf/server.conf
 
 # create pagespeed cache directory
