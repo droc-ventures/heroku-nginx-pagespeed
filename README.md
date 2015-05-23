@@ -10,7 +10,12 @@ Heroku Requirement:
 Usage:
 * We use this stack to server static websites built with AngularJS.
 
-Compile and Package Nginx
+Use Buildpack AS-IS
+----------------------------------
+Just add the following to your application Config Variables:
+```BUILDPACK_URL```: ```https://github.com/droc-ventures/heroku-nginx-pagespeed.git```.
+
+Compile and Package Nginx Yourself
 ----------------------------------
 This script should be excuted via the terminal ```heroku run bash --app=app-name```.
 ```
