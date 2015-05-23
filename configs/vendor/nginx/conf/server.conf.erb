@@ -1,0 +1,126 @@
+server {
+  	server_name	localhost;
+  	listen		<%= ENV['PORT'] %>;
+	charset		utf-8;
+	
+	# prevent clickjacking
+	add_header	X-Frame-Options "SAMEORIGIN";
+
+	# pagespeed configuration
+	pagespeed 	on;
+	pagespeed 	FileCachePath "/tmp/pagespeed/";
+	pagespeed 	XHeaderValue "pagespeed";
+	pagespeed 	PreserveUrlRelativity on;
+	pagespeed 	LowercaseHtmlNames on;
+	pagespeed 	ModifyCachingHeaders off;
+	pagespeed 	Statistics off;
+	pagespeed 	AvoidRenamingIntrospectiveJavascript off;
+	pagespeed 	MaxCacheableContentLength -1;
+	
+	# pagespeed javascript experiment
+	pagespeed 	UseExperimentalJsMinifier on;
+	
+	# pagespeed default filters
+	pagespeed	RewriteLevel CoreFilters;
+	
+	# pagespeed filters
+	pagespeed 	EnableFilters collapse_whitespace;			# html
+	pagespeed	EnableFilters remove_comments;				# html
+	pagespeed 	EnableFilters remove_quotes;				# html
+	pagespeed	EnableFilters rewrite_images;				# images
+	pagespeed	EnableFilters convert_png_to_jpeg;			# images
+	pagespeed	EnableFilters convert_jpeg_to_webp;			# images
+	pagespeed 	EnableFilters lazyload_images;				# images
+	pagespeed	EnableFilters defer_javascript;				# javascript
+	pagespeed	EnableFilters rewrite_javascript;			# javascript
+	pagespeed 	EnableFilters inline_css;					# css
+	#pagespeed	EnableFilters combine_css;					# css
+	pagespeed	EnableFilters prioritize_critical_css;		# css
+	pagespeed	EnableFilters rewrite_css;					# css
+	#pagespeed 	EnableFilters fallback_rewrite_css_urls;	# css fallback
+	pagespeed	EnableFilters inline_google_font_css;		# google fonts
+	pagespeed 	EnableFilters insert_dns_prefetch;			# dns
+	pagespeed 	EnableFilters extend_cache;					# caching
+
+	# Ensure requests for pagespeed optimized resources go to the pagespeed handler
+	# and no extraneous headers get set.
+	location ~ "\.pagespeed\.([a-z]\.)?[a-z]{2}\.[^.]{10}\.[^.]+" {
+		add_header "" "";
+	}
+	
+	# pagespeed handlers
+	location ~ "^/pagespeed_static/" { }
+	location ~ "^/ngx_pagespeed_beacon$" { }
+	
+	# deny hidden files
+  	location ~ /\. {
+    	deny            all;
+    	access_log      off;
+    	log_not_found	off;
+    	
+		return 			404;
+  	}
+
+	# allow robots.txt, humans.txt and favicon.ico
+	location ~ ^/(robots.txt|humans.txt|favicon.ico) {
+		access_log 		off;
+    	log_not_found	off;
+
+		expires 		max;
+	}
+
+	# allow nginx status (localhost only)
+	location = /nginx_status {
+		allow 			127.0.0.1;
+		deny			all;
+	  	stub_status 	on;
+    	access_log      off;
+    	log_not_found	off;
+	}
+
+	# allow cdn access
+	location ~* \.(ico|eot|woff|ttf|ttc|otf|css|js|jpg|jpeg|png|gif|svg|svgz|webp|webm)$ {
+		access_log      off;
+    	log_not_found	off;
+
+		#expires 		365d;
+    	
+		add_header 		Pragma "public";
+		add_header 		Cache-Control "public, max-age=300";
+		add_header 		Access-Control-Allow-Origin "*";
+	}
+	
+	# allow static files
+	location ~* (?i)^/(css|img|js|font|swf)/(.+)$ {
+    	access_log      off;
+    	log_not_found	off;
+    	
+		root 			/app/www/<your root directory>;
+	}
+	
+	# vary header on zippable fonts
+	location ~* \.(?:eot|ttf|svg)$ {
+    	access_log      off;
+    	log_not_found	off;
+    	
+		add_header		Vary "Accept-Encoding";
+	}
+	
+	# unsupported
+	location /unsupported {
+        expires 		-1;
+        add_header 		Pragma "no-cache";
+        add_header 		Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0";
+		
+		try_files 		$uri$args $uri$args/ /unsupported.html;
+	}
+	
+	# default redirect
+	location / {
+        expires 		-1;
+        add_header 		Pragma "no-cache";
+        add_header 		Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0";
+		
+		try_files 		$uri$args $uri$args/ /index.html;
+	}
+}
